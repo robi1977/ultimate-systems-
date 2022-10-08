@@ -1,22 +1,18 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-export const userSlice = createSlice({
+const initialState = {
+  loading: false,
+  userInfo: {},
+  userToken: null,
+  error: null,
+  success: false,
+}
+
+const userSlice = createSlice({
   name: "user",
-  initialState: {
-    username: "",
-    email: "",
-    name: "",
-    surname: "",
-    isFetching: false,
-    isSuccess: false,
-    isError: false,
-    isActive: true,
-    errorMessage: "",
-    successMessage: ""
-  },
-  reducers: {
-    // TODO: Do uzupełnienia
-  }
+  initialState,
+  reducer: {},
+  extraReducers: {}
 })
 
-export const userSelector = state => state.user
+export default userSlice.reducer;
