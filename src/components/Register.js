@@ -1,9 +1,24 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { EnvelopIcon } from "./EnvelopIcon";
 import { LockIcon } from "./LockIcon";
+import { registerUser } from "../features/user/userAction";
 
 const Register = () => {
+  const { loading, userInfo, error, success } = useSelector(
+    (state) => state.user
+  )
+  const dispatch = useDispatch();
+  
   const { register, handleSubmit } = useForm();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if(success) navigate('/login');
+
+    if(userInfo) navigate('/dashboard');
+  }, [navigate, userInfo, success]);
 
   const submitForm = (data) => {
     if (data.password !== data.confirmPassword) {
@@ -11,9 +26,11 @@ const Register = () => {
       alert("Różne hasła");
       return 
     }
+
     data.email = data.email.toLowerCase();
     //FIXME: usunąć console.log
     console.log(data);
+    dispatch(registerUser(data));
   }
 
   return (
@@ -40,7 +57,7 @@ const Register = () => {
           <span></span>
         </div>
         <div className="form-group">
-          <button type="submit" className="form-button">Zarejestruj się</button>
+          <button type="submit" className="form-button" disabled={loading}>Zarejestruj się</button>
         </div>
       </form>
     </div>

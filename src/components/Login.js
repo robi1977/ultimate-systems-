@@ -1,13 +1,25 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { userLogin } from "../features/user/userAction";
 import { EnvelopIcon } from "./EnvelopIcon";
 import { LockIcon } from "./LockIcon";
 
 const Login = () => {
+  const { loading, userInfo, error } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    if(userInfo) {
+      navigate('/dashboard');
+    }
+  }, [navigate, userInfo]);
+  
   const submitForm = (data) => {
-    //FIXME: do usunięcia console.log 
-    console.log(data);
+    dispatch(userLogin(data));
   }
 
   return (
@@ -17,17 +29,17 @@ const Login = () => {
         <div className="form-group">
           <label htmlFor="email">E-mail</label>
           <EnvelopIcon/>
-          <input type="email" className="input-field" id="email" {...register("email", {required: true})} placeholder="piotrkowalski@gmail.com"/>
+          <input type="text" className="input-field" id="email" {...register("email", {required: true})} placeholder="piotrkowalski@gmail.com"/>
           <span></span>
         </div>
         <div className="form-group">
           <label htmlFor="password">Hasło</label>
           <LockIcon/>
-          <input type="password" className="input-field" id="password" {...register("password", {required: true})} placeholder="Minimum 8 znaków"/>
+          <input type="password" className="input-field" id="password" {...register("password", {required: true, min: 8})} placeholder="Minimum 8 znaków"/>
           <span></span>
         </div>
         <div className="form-group">
-          <button type="submit" className="form-button">Zaloguj się</button>
+          <button type="submit" className="form-button" disabled={loading}>Zaloguj się</button>
         </div>
       </form>
     </div>
