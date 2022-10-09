@@ -7,6 +7,7 @@ import Dashboard from './components/Dashboard';
 import Home from './components/Home';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserDetails } from './features/user/userAction';
+import ProtectedRoute from './components/routes/ProtectedRoute';
 
 function App() {
   const { userInfo, userToken } = useSelector((state) => state.user);
@@ -25,7 +26,9 @@ function App() {
           <Route path='/' element={<Home/>} />
           <Route path='/login' element={<Login/>} />
           <Route path='/register' element={<Register/>} />
-          <Route path='/dashboard' element={<Dashboard />} />
+          <Route element={<ProtectedRoute/>}>
+            <Route path='/dashboard' element={<Dashboard/>} />
+          </Route>
         </Routes>
       </Router>
     </div>
